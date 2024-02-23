@@ -1,0 +1,40 @@
+package com.otpexample.controller;
+
+import com.otpexample.Entity.User;
+import com.otpexample.service.EmailService;
+import com.otpexample.service.EmailVerificationService;
+import com.otpexample.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class RegistrationController {
+
+    @Autowired
+    public UserService userService;
+    @Autowired
+    public EmailService emailService;
+    @Autowired
+    private EmailVerificationService emailVerificationService;
+
+    @PostMapping("/register")
+    public Map<String, String> registerUser(@RequestBody User user){
+        User registerUser = userService.registerUser(user);
+        //sent otp for email verification
+        emailService.sendOtpEmail(user.getEmail());
+        Map<String, String> response = new HashMap<>();
+        response.put("status","success");
+        response.put("message","User register successfully. check your email for verification.");
+        return  response;
+
+    }
+    @PostMapping("/verify-otp")
+    public  Map<String,String> verifyOtp(@RequestParam String email,@RequestParam String otp){
+        return  emailVerificationService.verifyOtp(email, otp);
+    }
+
+}
