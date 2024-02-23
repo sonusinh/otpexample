@@ -35,7 +35,7 @@ public class EmailService {
     }
     private  void  sendEmail(String to, String subject,String text){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("yourgmail@gmail.com");
+        message.setFrom("your.gmail@gmail.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
